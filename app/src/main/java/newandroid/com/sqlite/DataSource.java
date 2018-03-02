@@ -15,34 +15,33 @@ import java.util.List;
  */
 
 public class DataSource {
-    SQLiteOpenHelper dbhelper, dbhelper2;
-    SQLiteDatabase sqLiteDatabase,sqLiteDatabase2;
+    SQLiteOpenHelper dbhelper, dbhelper2, dbhelper3;
+    SQLiteDatabase sqLiteDatabase,sqLiteDatabase2, sqLiteDatabase3;
 
     private static String[] allColumns = {
             PersonasSQLiteOpenHelper.COLUMN_ID,
             PersonasSQLiteOpenHelper.COLUMN_NOMBRE,
             PersonasSQLiteOpenHelper.COLUMN_APELLIDO,
             PersonasSQLiteOpenHelper.COLUMN_ID_DEP
-
-
     };
 
     private static String[] allColumns2 = {
             DepartamentosSQLiteOpenHelper.COLUMN_ID_DEP,
             DepartamentosSQLiteOpenHelper.COLUMN_DEPARTAMENTO
-
     };
 
     public DataSource(Context context){
 
         dbhelper = new PersonasSQLiteOpenHelper(context);
         dbhelper2 = new DepartamentosSQLiteOpenHelper(context);
+        dbhelper3 = new ClaseAuxiliarSQLiteOpenHelper(context);
 
     }
 
     public void open(){
         sqLiteDatabase = dbhelper.getWritableDatabase();
         sqLiteDatabase2 = dbhelper2.getWritableDatabase();
+        sqLiteDatabase3 = dbhelper3.getWritableDatabase();
     }
 
     public void close(){
@@ -114,13 +113,21 @@ public class DataSource {
 
 
     public void queryJoin(){
-        sqLiteDatabase.execSQL("attach database ? as deptosdb", new String[]{"/data/data/newandroid.com.sqlite/databases/departamentos.db"});
+       /* sqLiteDatabase.execSQL("attach database ? as deptosdb", new String[]{"/data/data/newandroid.com.sqlite/databases/departamentos.db"});
 
        // sqLiteDatabase.execSQL("ATTACH 'departamentos.db' AS deptos_DB");
         String query = "SELECT departamento FROM deptosdb.departamentos INNER JOIN personas ON personas.id_dep = deptosdb.departamentos.id_dep";
         Cursor cursor = sqLiteDatabase.rawQuery(query,null);
         while (cursor.moveToNext()) {
                 Log.i("cursor", cursor.getString(0));
+        }*/
+
+        sqLiteDatabase3.execSQL("attach database ? as personasdb", new String[]{"/data/data/newandroid.com.sqlite/databases/personas.db"});
+        sqLiteDatabase3.execSQL("attach database ? as deptosdb", new String[]{"/data/data/newandroid.com.sqlite/databases/departamentos.db"});
+        String query2 = "SELECT DISTINCT departamento FROM deptosdb.departamentos INNER JOIN personasdb.personas ON personasdb.personas.id_dep = deptosdb.departamentos.id_dep";
+        Cursor cursor2 = sqLiteDatabase3.rawQuery(query2,null);
+        while (cursor2.moveToNext()) {
+            Log.i("cursor", cursor2.getString(0));
         }
 
         ///Log.i("cursor",cursor.getString(1));
