@@ -129,7 +129,6 @@ public class DataSource {
         while (cursor2.moveToNext()) {
             Log.i("cursor", cursor2.getString(0));
         }
-
         ///Log.i("cursor",cursor.getString(1));
      /*   List <Departamento> departamentos = new ArrayList<>();
         if(cursor.getCount()>0){
