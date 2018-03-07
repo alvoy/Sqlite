@@ -11,7 +11,7 @@ import android.database.sqlite.SQLiteOpenHelper
 class ClaseAuxiliarSQLiteOpenHelper/* public static final String TABLE_DEPTOS = "aux";
     public static final String COLUMN_ID_AUX = "id_aux";
 */
-(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
+(context: Context) : SQLiteOpenHelper(context, "aux.db", null, 1) {
 
     override fun onCreate(db: SQLiteDatabase) {
 
@@ -21,9 +21,4 @@ class ClaseAuxiliarSQLiteOpenHelper/* public static final String TABLE_DEPTOS = 
 
     }
 
-    companion object {
-
-        private val DATABASE_NAME = "aux.db"
-        private val DATABASE_VERSION = 1
-    }
 }

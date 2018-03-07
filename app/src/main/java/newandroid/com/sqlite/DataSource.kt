@@ -6,7 +6,7 @@ import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.util.Log
-
+import org.jetbrains.anko.db.*
 import java.util.ArrayList
 
 /**
@@ -14,55 +14,53 @@ import java.util.ArrayList
  */
 
 class DataSource(context: Context) {
-     var dbhelper: SQLiteOpenHelper
-     var dbhelper2: SQLiteOpenHelper
-     var dbhelper3: SQLiteOpenHelper
-     lateinit var sqLiteDatabase: SQLiteDatabase
-     lateinit var sqLiteDatabase2: SQLiteDatabase
-     lateinit var sqLiteDatabase3: SQLiteDatabase
 
-    init {
+    val dbhelper = PersonaSQLiteOpenHelper(context)
+    val dbhelper2 = DepartamentoSQLiteOpenHelper(context)
 
-        dbhelper = PersonasSQLiteOpenHelper(context)
-        dbhelper2 = DepartamentosSQLiteOpenHelper(context)
-        dbhelper3 = ClaseAuxiliarSQLiteOpenHelper(context)
 
-    }
 
-    fun open() {
-        sqLiteDatabase = dbhelper.writableDatabase
-        sqLiteDatabase2 = dbhelper2.writableDatabase
-        sqLiteDatabase3 = dbhelper3.writableDatabase
-    }
 
-    fun close() {
-        dbhelper.close()
-        dbhelper2.close()
-    }
+    fun create() {
+        dbhelper.use {
+            insert(Persona.NOMBRE_TABLA,
+                        Persona.ID to 1,
+                        Persona.NOMBRE to "Alvaro",
+                        Persona.APELLIDO to "Moya",
+                        Persona.ID_DEP to 1)
 
-    fun create(persona: Persona) {
-        val contentValues = ContentValues()
-        contentValues.put(PersonasSQLiteOpenHelper.COLUMN_NOMBRE, persona.nombre)
-        contentValues.put(PersonasSQLiteOpenHelper.COLUMN_APELLIDO, persona.apellido)
-        contentValues.put(PersonasSQLiteOpenHelper.COLUMN_ID_DEP, persona.id_dep)
-        sqLiteDatabase.insert(PersonasSQLiteOpenHelper.TABLE_PERSONAS, null, contentValues)
+            insert(Persona.NOMBRE_TABLA,
+                    Persona.ID to 2,
+                    Persona.NOMBRE to "Arturo",
+                    Persona.APELLIDO to "Sanhueza",
+                    Persona.ID_DEP to 2)
+        }
 
+        dbhelper2.use {
+            insert(Departamento.NOMBRE_TABLA,
+                    Departamento.ID_DEP to 1,
+                    Departamento.DEPARTAMENTO to "Informática")
+
+            insert(Departamento.NOMBRE_TABLA,
+                    Departamento.ID_DEP to 2,
+                    Departamento.DEPARTAMENTO to "Comercial")
+
+        }
 
     }
 
     fun create2(departamento: Departamento) {
-        val contentValues2 = ContentValues()
-        contentValues2.put(DepartamentosSQLiteOpenHelper.COLUMN_DEPARTAMENTO, departamento.departamento)
-        sqLiteDatabase2.insert(DepartamentosSQLiteOpenHelper.TABLE_DEPTOS, null, contentValues2)
+
+
 
     }
 
-    fun findAllPersons(): List<Persona> {
+   /* fun findAllPersons(): List<Persona> {
         val cursor = sqLiteDatabase.query(PersonasSQLiteOpenHelper.TABLE_PERSONAS, allColumns, null, null, null, null, null)
         return cursortoList(cursor)
-    }
+    }*/
 
-    fun cursortoList(cursor: Cursor): List<Persona> {
+ /*   fun cursortoList(cursor: Cursor): List<Persona> {
         val personas = ArrayList<Persona>()
         if (cursor.count > 0) {
             while (cursor.moveToNext()) {
@@ -78,8 +76,10 @@ class DataSource(context: Context) {
         return personas
 
 
-    }
+    }*/
 
+
+/*
     fun findAllDeptos(): List<Departamento> {
         val cursor2 = sqLiteDatabase2.query(DepartamentosSQLiteOpenHelper.TABLE_DEPTOS, allColumns2, null, null, null, null, null)
         return cursortoList2(cursor2)
@@ -102,14 +102,14 @@ class DataSource(context: Context) {
 
 
     fun queryJoin() {
-        /* sqLiteDatabase.execSQL("attach database ? as deptosdb", new String[]{"/data/data/newandroid.com.sqlite/databases/departamentos.db"});
+        *//* sqLiteDatabase.execSQL("attach database ? as deptosdb", new String[]{"/data/data/newandroid.com.sqlite/databases/departamentos.db"});
 
        // sqLiteDatabase.execSQL("ATTACH 'departamentos.db' AS deptos_DB");
         String query = "SELECT departamento FROM deptosdb.departamentos INNER JOIN personas ON personas.id_dep = deptosdb.departamentos.id_dep";
         Cursor cursor = sqLiteDatabase.rawQuery(query,null);
         while (cursor.moveToNext()) {
                 Log.i("cursor", cursor.getString(0));
-        }*/
+        }*//*
 
         sqLiteDatabase3.execSQL("attach database ? as personasdb", arrayOf("/data/data/newandroid.com.sqlite/databases/personas.db"))
         sqLiteDatabase3.execSQL("attach database ? as deptosdb", arrayOf("/data/data/newandroid.com.sqlite/databases/departamentos.db"))
@@ -119,7 +119,7 @@ class DataSource(context: Context) {
             Log.i("cursor", cursor2.getString(0))
         }
         ///Log.i("cursor",cursor.getString(1));
-        /*   List <Departamento> departamentos = new ArrayList<>();
+        *//*   List <Departamento> departamentos = new ArrayList<>();
         if(cursor.getCount()>0){
             while (cursor.moveToNext()){
                 Departamento departamento = new Departamento();
@@ -129,14 +129,14 @@ class DataSource(context: Context) {
             }
         }
 
-        return departamentos;*/
+        return departamentos;*//*
     }
 
     companion object {
 
         private val allColumns = arrayOf(PersonasSQLiteOpenHelper.COLUMN_ID, PersonasSQLiteOpenHelper.COLUMN_NOMBRE, PersonasSQLiteOpenHelper.COLUMN_APELLIDO, PersonasSQLiteOpenHelper.COLUMN_ID_DEP)
         private val allColumns2 = arrayOf(DepartamentosSQLiteOpenHelper.COLUMN_ID_DEP, DepartamentosSQLiteOpenHelper.COLUMN_DEPARTAMENTO)
-    }
+    }*/
 
 
 }

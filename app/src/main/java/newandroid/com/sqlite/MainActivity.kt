@@ -5,7 +5,9 @@ import android.os.Bundle
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Button
+import android.widget.ListAdapter
 import android.widget.ListView
+import org.jetbrains.anko.db.*
 
 
  class MainActivity : AppCompatActivity() {
@@ -27,12 +29,10 @@ import android.widget.ListView
         listView = findViewById(R.id.listview) as ListView
         listView2 = findViewById(R.id.listview2) as ListView
 
-
         dataSource = DataSource(this)
-        dataSource.open()
         createData()
 
-        inserta.setOnClickListener {
+      /*  inserta.setOnClickListener {
             personas = dataSource.findAllPersons()
             departamentos = dataSource.findAllDeptos()
             refreshDisplay()
@@ -41,15 +41,12 @@ import android.widget.ListView
         join.setOnClickListener {
             dataSource.queryJoin()
             //departamentos = dataSource.queryJoin();
-        }
+        }*/
     }
 
     fun createData() {
-        dataSource.create(Persona(1, "Alvaro", "Moya", 3))
-        dataSource.create(Persona(2, "Arturo", "Sanhueza", 2))
-        dataSource.create2(Departamento(1, "Administración"))
-        dataSource.create2(Departamento(2, "Informática"))
-        dataSource.create2(Departamento(3, "Comercial"))
+        dataSource.create()
+
 
     }
 
